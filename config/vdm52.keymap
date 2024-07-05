@@ -5,10 +5,11 @@
 #include <dt-bindings/zmk/outputs.h>
 
 #define QWERTY_L 0
-#define MAC_Q_L  1
-#define SYM_L    2
-#define NUM_L    3
-#define ADJ_L    4
+#define GAME_Q_L 1
+#define MAC_Q_L  2
+#define SYM_L    3
+#define NUM_L    4
+#define ADJ_L    5
 
 
 #define Undo   LC(Z)
@@ -39,6 +40,25 @@
 
                 };
 
+                game_layer {
+/* QWERTY
+ * -------------------------------------------------------------------------------------------------------------------------------------
+ * | `     |   T   |   Q   |   W   |   E   |   R   |-----------------------------------|   Y   |   U   |   I   |   O   |   P   | BKSPC |
+ * | TAB   |   G   |   A   |   S   |   D   |   F   |-----------------------------------|   H   |   J   |   K   |   L   |   ;   | ENTER |
+ * | SHIFT |   B   |   Z   |   X   |   C   |   V   |-----------------------------------|   N   |   M   |   ,   |   .   |   /   | SHIFT |
+ * ----------------|  VOL- |  VOL+ |  CTRL |  ALT  |  GUI  | Play/P |--| CAPS  |  ESC  |  ALT  |   '   | PG_UP | PG_DN |----------------
+ * ------------------------------------------------| SPACE |  Sym   |--|  Num  | SPACE |------------------------------------------------
+ */
+                        bindings = <
+&kp  GRAVE    &kp  T        &kp  Q        &kp  W        &kp  E        &kp  R                                                                        &kp  Y        &kp  U        &kp  I        &kp  O        &kp  P        &kp  BSPC
+&kp  TAB      &kp  G        &kp  A        &kp  S        &kp  D        &kp  F                                                                        &kp  H        &kp  J        &kp  K        &kp  L        &kp  SEMI     &kp  ENTER  
+&kp  LSHFT    &kp  B        &kp  Z        &kp  X        &kp  C        &kp  V                                                                        &kp  N        &kp  M        &kp  COMMA    &kp  DOT      &kp  SLASH    &kp  RSHFT
+                            &kp  C_VOL_DN &kp  C_VOL_UP &kp  LCTRL    &kp  LALT     &kp  LGUI     &kp  C_PP          &kp  CAPS        &kp  ESC      &kp  RALT     &kp  SQT      &kp  PG_UP    &kp  PG_DN
+                                                                                    &kp  SPACE    &mo  SYM_L         &mo  NUM_L       &kp  SPACE
+                        >;
+
+                };
+
                 mac_default_layer {
 /* MAC_QWERTY
  * -------------------------------------------------------------------------------------------------------------------------------------
@@ -57,6 +77,9 @@
                         >;
 
                 };
+
+keymap {
+                compatible = "zmk,keymap";
 
                 sym_layer {
 /* SYM
@@ -99,14 +122,14 @@
                 adj_layer {
 /* ADJUST
  * ----------------------------------------------------------------------------------------------------------------------------------------
- * |MAC_QWERTY| QWERTY|       |       | NUM   |       |-----------------------------------|       |Prt Scr|       | EP_OFF| EP_ON |       |
+ * |MAC_QWERTY| QWERTY| GAME_L|       | NUM   |       |-----------------------------------|       |Prt Scr|       | EP_OFF| EP_ON |       |
  * |          | BT 0  | BT 1  | BT 2  | BT 3  | BT 4  |-----------------------------------|       |       |       |       |       |       |
  * |   BOOTL  | RESET |       |OUT_USB|OUT_BLE|       |-----------------------------------|       |       |       |       |       | SHIFT |
  * -------------------|       |       |       |       |       | BT_CLR |--|       |       |       |       |       |       |----------------
  * ---------------------------------------------------|       |        |--|       |       |------------------------------------------------
  */
                         bindings = <
-&to MAC_Q_L   &to  QWERTY_L &none         &none         &to  NUM_L    &none                                                                             &none             &kp PRINTSCREEN    &none         &ext_power EP_OFF  &ext_power EP_ON &none
+&to MAC_Q_L   &to  QWERTY_L &to  GAME_Q_L &none         &to  NUM_L    &none                                                                             &none             &kp PRINTSCREEN    &none         &ext_power EP_OFF  &ext_power EP_ON &none
 &none         &bt  BT_SEL 0 &bt  BT_SEL 1 &bt  BT_SEL 2 &bt  BT_SEL 3 &bt  BT_SEL 4                                                                     &none             &none              &none            &none           &none            &none
 &bootloader   &sys_reset    &none         &out OUT_USB  &out OUT_BLE  &none                                                                             &none             &none              &none            &none           &none            &trans
                             &trans        &trans        &trans        &trans        &trans        &bt BT_CLR             &none         &trans           &trans            &trans             &none            &none
